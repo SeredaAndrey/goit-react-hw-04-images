@@ -1,8 +1,49 @@
-import React from 'react';
+import ImageGalleryItem from 'components/imagegalleryitem/imagegalleryitem';
+import React, { Component } from 'react';
 import { GalleryImage } from './imagegallery.styled';
+import axios from 'axios';
 
-const ImageGallery = () => {
-  return <GalleryImage></GalleryImage>;
-};
+axios.defaults.baseURL = 'https://pixabay.com/api/';
+const API_KEY = '30850586-c34f803e4eb5b9dfd0cd416b1';
+
+class ImageGallery extends Component {
+  state = { articles: [] };
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.searchValue !== this.props.searchValue) {
+      this.props.onHandleSpinner(true);
+      const response = await axios.get(
+        `?key=${API_KEY}&per_page=12&page=1&q=${this.props.searchValue}`
+      );
+      this.setState({
+        articles: response.data.hits,
+      });
+      this.props.onHandleSpinner(false);
+    }
+    if (prevProps.searchPage !== this.props.searchPage) {
+      this.props.onHandleSpinner(true);
+      const response = await axios.get(
+        `?key=${API_KEY}&per_page=12&page=${this.props.searchPage}&q=${this.props.searchValue}`
+      );
+      this.setState(prevState => ({
+        articles: this.state.articles.concat(response.data.hits),
+      }));
+      this.props.onHandleSpinner(false);
+    }
+  }
+
+  render() {
+    return (
+      <GalleryImage>
+        {this.state.articles.length !== 0 &&
+          this.state.articles.map(({ id, previewURL, tags }) => {
+            return (
+              <ImageGalleryItem id={id} previewURL={previewURL} tags={tags} />
+            );
+          })}
+      </GalleryImage>
+    );
+  }
+}
 
 export default ImageGallery;

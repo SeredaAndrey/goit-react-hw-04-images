@@ -25,11 +25,17 @@ class App extends Component {
   incrasePageNumber = () => {
     this.setState(prevState => ({ searchPage: this.state.searchPage + 1 }));
   };
+  resetPageNumber = () => {
+    this.setState({ searchPage: 1 });
+  };
 
   render() {
     return (
       <div>
-        <SearchBar onSubmit={this.handleFormSubmit} />
+        <SearchBar
+          onSubmit={this.handleFormSubmit}
+          resetPage={this.resetPageNumber}
+        />
         <ImageGallery
           searchValue={this.state.searchValue}
           searchPage={this.state.searchPage}

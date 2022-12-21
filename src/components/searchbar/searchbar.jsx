@@ -16,6 +16,7 @@ class SearchBar extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    this.props.resetPage();
     if (this.state.searchValue.trim() === '') {
       alert('input search request');
     }

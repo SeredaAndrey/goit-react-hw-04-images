@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   GalleryImageItem,
   GalleryImageItemImage,
@@ -24,3 +25,10 @@ const ImageGalleryItem = ({
 };
 
 export default ImageGalleryItem;
+
+ImageGalleryItem.prototype = {
+  id: PropTypes.string.isRequired,
+  previewURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+};

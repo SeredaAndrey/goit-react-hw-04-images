@@ -20,7 +20,9 @@ class ImageGallery extends Component {
       articles: response.data.hits,
     });
     this.props.onHandleSpinner(false);
-    this.props.onHandleButton(true);
+    if (response.data.hits.length !== 0) {
+      this.props.onHandleButton(true);
+    }
   }
   async fetchMoreArticles() {
     this.props.onHandleButton(false);

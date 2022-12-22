@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Overlay } from './modal.styled';
 
 const ModalPicture = ({ URL, tags, onClose }) => {
@@ -11,3 +12,8 @@ const ModalPicture = ({ URL, tags, onClose }) => {
   );
 };
 export default ModalPicture;
+
+ModalPicture.prototype = {
+  URL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+};

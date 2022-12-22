@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { RotatingLines } from 'react-loader-spinner';
+import Loader from './loader/loader';
 import ImageGallery from './imagegallery/imagegallery';
 import SearchBar from './searchbar/searchbar';
 import LoadMoreButton from './morebutton/morebutton';
@@ -36,7 +36,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div class="app__style">
         <SearchBar
           onSubmit={this.handleFormSubmit}
           resetPage={this.resetPageNumber}
@@ -47,15 +47,7 @@ class App extends Component {
           onHandleSpinner={this.wisibleSpinner}
           onHandleButton={this.wisibleButtonMore}
         />
-        {this.state.isLoading && (
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="96"
-            visible={true}
-          />
-        )}
+        {this.state.isLoading && <Loader />}
         {this.state.buttonMore && (
           <LoadMoreButton incrasePageNumber={this.incrasePageNumber} />
         )}

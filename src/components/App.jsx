@@ -9,17 +9,22 @@ class App extends Component {
     searchValue: '',
     searchPage: 1,
     isLoading: false,
+    buttonMore: false,
   };
 
   handleFormSubmit = searchValue => {
     this.setState({ searchValue });
-    // console.log(searchValue);
   };
 
   wisibleSpinner = bool => {
     bool === true
       ? this.setState({ isLoading: true })
       : this.setState({ isLoading: false });
+  };
+  wisibleButtonMore = bool => {
+    bool === true
+      ? this.setState({ buttonMore: true })
+      : this.setState({ buttonMore: false });
   };
 
   incrasePageNumber = () => {
@@ -40,6 +45,7 @@ class App extends Component {
           searchValue={this.state.searchValue}
           searchPage={this.state.searchPage}
           onHandleSpinner={this.wisibleSpinner}
+          onHandleButton={this.wisibleButtonMore}
         />
         {this.state.isLoading && (
           <RotatingLines
@@ -50,7 +56,9 @@ class App extends Component {
             visible={true}
           />
         )}
-        <LoadMoreButton incrasePageNumber={this.incrasePageNumber} />
+        {this.state.buttonMore && (
+          <LoadMoreButton incrasePageNumber={this.incrasePageNumber} />
+        )}
       </div>
     );
   }

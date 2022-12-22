@@ -37,6 +37,7 @@ class ImageGallery extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchValue !== this.props.searchValue) {
+      this.setState({ articles: '' });
       this.fetchArticles();
     } else if (prevProps.searchPage !== this.props.searchPage) {
       this.fetchMoreArticles();
@@ -47,9 +48,15 @@ class ImageGallery extends Component {
     return (
       <GalleryImage>
         {this.state.articles.length !== 0 &&
-          this.state.articles.map(({ id, previewURL, tags }) => {
+          this.state.articles.map(({ id, previewURL, tags, largeImageURL }) => {
             return (
-              <ImageGalleryItem id={id} previewURL={previewURL} tags={tags} />
+              <ImageGalleryItem
+                HandlePictureView={this.props.HandlePictureView}
+                id={id}
+                previewURL={previewURL}
+                tags={tags}
+                largeImageURL={largeImageURL}
+              />
             );
           })}
       </GalleryImage>

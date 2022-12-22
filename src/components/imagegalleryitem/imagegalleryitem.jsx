@@ -4,9 +4,20 @@ import {
   GalleryImageItemImage,
 } from './imagegalleryitem.styled';
 
-const ImageGalleryItem = ({ id, previewURL, tags }) => {
+const ImageGalleryItem = ({
+  id,
+  previewURL,
+  largeImageURL,
+  tags,
+  HandlePictureView,
+}) => {
   return (
-    <GalleryImageItem key={id}>
+    <GalleryImageItem
+      key={id}
+      onClick={() => {
+        HandlePictureView(largeImageURL, tags);
+      }}
+    >
       <GalleryImageItemImage src={previewURL} alt={tags} />
     </GalleryImageItem>
   );

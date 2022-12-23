@@ -13,26 +13,34 @@ class ImageGallery extends Component {
     this.props.onHandleButton(false);
     this.props.onHandleSpinner(true);
 
-    const response = await axios.get(
-      `?key=${API_KEY}&per_page=12&page=1&q=${this.props.searchValue}`
-    );
-    this.setState({
-      articles: response.data.hits,
-    });
-    this.props.onHandleSpinner(false);
-    if (response.data.hits.length !== 0) {
-      this.props.onHandleButton(true);
+    try {
+      const response = await axios.get(
+        `?key=${API_KEY}&per_page=12&page=1&q=${this.props.searchValue}`
+      );
+      this.setState({
+        articles: response.data.hits,
+      });
+      this.props.onHandleSpinner(false);
+      if (response.data.hits.length !== 0) {
+        this.props.onHandleButton(true);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
   async fetchMoreArticles() {
     this.props.onHandleButton(false);
     this.props.onHandleSpinner(true);
-    const response = await axios.get(
-      `?key=${API_KEY}&per_page=12&page=${this.props.searchPage}&q=${this.props.searchValue}`
-    );
-    this.setState(prevState => ({
-      articles: this.state.articles.concat(response.data.hits),
-    }));
+    try {
+      const response = await axios.get(
+        `?key=${API_KEY}&per_page=12&page=${this.props.searchPage}&q=${this.props.searchValue}`
+      );
+      this.setState(prevState => ({
+        articles: this.state.articles.concat(response.data.hits),
+      }));
+    } catch (error) {
+      console.error(error);
+    }
     this.props.onHandleSpinner(false);
     this.props.onHandleButton(true);
   }

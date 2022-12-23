@@ -39,7 +39,7 @@ class App extends Component {
   resetPageNumber = () => {
     this.setState({ searchPage: 1 });
   };
-  //включить модальное окно и записать адрес УРЛ и АЛЬТ в стейт
+  //включить модальное окно и записать адрес УРЛ и АЛЬТ в стейт, повесить слушатель на еск
   visbleModalWindow = (largeImageURL, tags) => {
     this.setState({
       modalURL: largeImageURL,
@@ -48,13 +48,16 @@ class App extends Component {
     });
     document.addEventListener('keydown', this.escFunction, false);
   };
+  //выключить модальное окно и снять слушатель на еск
   unvisibleModalWindow = () => {
     this.setState({ modalWindow: false });
     document.removeEventListener('keydown', this.escFunction, false);
   };
+  //закрытие модалки по клику на бекдроп
   onClose = event => {
     if (event.target.nodeName === 'DIV') this.setState({ modalWindow: false });
   };
+  //слушатель на еск
   escFunction = event => {
     if (event.key === 'Escape') {
       this.unvisibleModalWindow();

@@ -16,12 +16,15 @@ export default function ImageGallery({
   onHandleSpinner,
 }) {
   const [articles, setArticles] = useState([]);
+
   useEffect(() => {
     fetchArticles();
-  }, [searchValue, searchPage]);
+  }, [searchValue, searchPage, fetchArticles]);
+
   useEffect(() => {
     setArticles([]);
   }, [searchValue]);
+
   const fetchArticles = () => {
     if (searchValue) {
       onHandleButton(false);
@@ -42,6 +45,7 @@ export default function ImageGallery({
         .catch(console.error());
     }
   };
+
   return (
     <GalleryImage>
       {articles.length !== 0 &&

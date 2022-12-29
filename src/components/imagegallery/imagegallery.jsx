@@ -2,8 +2,7 @@ import ImageGalleryItem from 'components/imagegalleryitem/imagegalleryitem';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GalleryImage } from './imagegallery.styled';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '30850586-c34f803e4eb5b9dfd0cd416b1';
@@ -19,13 +18,13 @@ export default function ImageGallery({
 
   useEffect(() => {
     fetchArticles();
-  }, [searchValue, searchPage, fetchArticles]);
+  }, [searchValue, searchPage]);
 
   useEffect(() => {
     setArticles([]);
   }, [searchValue]);
 
-  const fetchArticles = () => {
+  function fetchArticles() {
     if (searchValue) {
       onHandleButton(false);
       onHandleSpinner(true);
@@ -44,7 +43,7 @@ export default function ImageGallery({
         })
         .catch(console.error());
     }
-  };
+  }
 
   return (
     <GalleryImage>

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { ImSearch } from 'react-icons/im';
 import {
   Searchbar,
@@ -7,41 +7,37 @@ import {
   SearchInput,
 } from './searchbar.styled';
 
-class SearchBar extends Component {
-  state = { searchValue: '' };
+export default function SearchBar({ resetPage, onSubmit }) {
+  const [searchValue, setSearchValue] = useState('');
 
-  handleSearchValueChange = event => {
-    this.setState({ searchValue: event.currentTarget.value.toLowerCase() });
+  const handleSearchValueChange = event => {
+    setSearchValue(event.currentTarget.value.toLowerCase());
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.props.resetPage();
-    if (this.state.searchValue.trim() === '') {
+    resetPage();
+    if (searchValue.trim() === '') {
       alert('input search request');
     }
-    this.props.onSubmit(this.state.searchValue);
-    this.setState({ searchValue: '' });
+    onSubmit(searchValue);
+    setSearchValue('');
   };
 
-  render() {
-    return (
-      <Searchbar>
-        <SearchForm onSubmit={this.handleSubmit}>
-          <SearchButton type="submit" className="button">
-            <ImSearch />
-          </SearchButton>
-          <SearchInput
-            type="text"
-            autocomplete="off"
-            placeholder="Search images and photos"
-            onChange={this.handleSearchValueChange}
-            value={this.state.searchValue}
-          />
-        </SearchForm>
-      </Searchbar>
-    );
-  }
+  return (
+    <Searchbar>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchButton type="submit" className="button">
+          <ImSearch />
+        </SearchButton>
+        <SearchInput
+          type="text"
+          autocomplete="off"
+          placeholder="Search images and photos"
+          onChange={handleSearchValueChange}
+          value={searchValue}
+        />
+      </SearchForm>
+    </Searchbar>
+  );
 }
-
-export default SearchBar;

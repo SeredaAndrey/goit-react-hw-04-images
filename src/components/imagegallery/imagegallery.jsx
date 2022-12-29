@@ -1,77 +1,66 @@
 import ImageGalleryItem from 'components/imagegalleryitem/imagegalleryitem';
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { GalleryImage } from './imagegallery.styled';
-import axios from 'axios';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-axios.defaults.baseURL = 'https://pixabay.com/api/';
+const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '30850586-c34f803e4eb5b9dfd0cd416b1';
 
-class ImageGallery extends Component {
-  state = { articles: [] };
-
-  async fetchArticles() {
-    this.props.onHandleButton(false);
-    this.props.onHandleSpinner(true);
-
-    try {
-      const response = await axios.get(
-        `?key=${API_KEY}&per_page=12&page=1&q=${this.props.searchValue}`
-      );
-      this.setState({
-        articles: response.data.hits,
-      });
-      this.props.onHandleSpinner(false);
-      if (response.data.hits.length !== 0) {
-        this.props.onHandleButton(true);
-      }
-    } catch (error) {
-      console.error(error);
+export default function ImageGallery({
+  searchValue,
+  searchPage,
+  HandlePictureView,
+  onHandleButton,
+  onHandleSpinner,
+}) {
+  const [articles, setArticles] = useState([]);
+  useEffect(() => {
+    fetchArticles();
+  }, [searchValue, searchPage]);
+  useEffect(() => {
+    setArticles([]);
+  }, [searchValue]);
+  const fetchArticles = () => {
+    if (searchValue) {
+      onHandleButton(false);
+      onHandleSpinner(true);
+      fetch(
+        `${BASE_URL}?key=${API_KEY}&per_page=12&page=${searchPage}&q=${searchValue}`
+      )
+        .then(response => response.json())
+        .then(response => {
+          if (searchPage === 1) {
+            setArticles(response.hits);
+          } else {
+            setArticles(articles.concat(response.hits));
+          }
+          onHandleButton(true);
+          onHandleSpinner(false);
+        })
+        .catch(console.error());
     }
-  }
-  async fetchMoreArticles() {
-    this.props.onHandleButton(false);
-    this.props.onHandleSpinner(true);
-    try {
-      const response = await axios.get(
-        `?key=${API_KEY}&per_page=12&page=${this.props.searchPage}&q=${this.props.searchValue}`
-      );
-      this.setState(prevState => ({
-        articles: this.state.articles.concat(response.data.hits),
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-    this.props.onHandleSpinner(false);
-    this.props.onHandleButton(true);
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevProps.searchValue !== this.props.searchValue) {
-      this.setState({ articles: '' });
-      this.fetchArticles();
-    } else if (prevProps.searchPage !== this.props.searchPage) {
-      this.fetchMoreArticles();
-    }
-  }
-
-  render() {
-    return (
-      <GalleryImage>
-        {this.state.articles.length !== 0 &&
-          this.state.articles.map(({ id, previewURL, tags, largeImageURL }) => {
-            return (
-              <ImageGalleryItem
-                HandlePictureView={this.props.HandlePictureView}
-                id={id}
-                previewURL={previewURL}
-                tags={tags}
-                largeImageURL={largeImageURL}
-              />
-            );
-          })}
-      </GalleryImage>
-    );
-  }
+  };
+  return (
+    <GalleryImage>
+      {articles.length !== 0 &&
+        articles.map(({ id, previewURL, tags, largeImageURL }) => {
+          return (
+            <ImageGalleryItem
+              HandlePictureView={HandlePictureView}
+              id={id}
+              previewURL={previewURL}
+              tags={tags}
+              largeImageURL={largeImageURL}
+            />
+          );
+        })}
+    </GalleryImage>
+  );
 }
 
-export default ImageGallery;
+ImageGallery.prototype = {
+  searchValue: PropTypes.string.isRequired,
+  searchPage: PropTypes.string.isRequired,
+};
